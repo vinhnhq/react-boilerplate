@@ -11,12 +11,15 @@
     "react-scripts": "3.4.3"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "build:tailwind": "tailwind build src/assets/styles/index.css -o src/assets/styles/tailwind.output.css",
+    "watch:tailwind": "chokidar 'src/**/*.css' 'src/**/*.scss' --ignore src/assets/styles/tailwind.output.css -c 'npm run build:tailwind'",
+    "start": "npm-run-all build:tailwind --parallel watch:tailwind start:react",
+    "start:react": "react-scripts start",
+    "prebuild": "cross-env NODE_ENV=production run-s build:tailwind",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint './src/**/*.{js,jsx}'",
-    "lint:fix": "eslint './src/**/*.{js,jsx}' --fix"
+    "lint": "eslint './src/**/*.{js,jsx}' --fix"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -34,12 +37,18 @@
     ]
   },
   "devDependencies": {
+    "autoprefixer": "^9.8.6",
+    "chokidar-cli": "^2.1.0",
+    "cross-env": "^7.0.2",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.13",
+    "npm-run-all": "^4.1.5",
+    "postcss-cli": "^7.1.2",
     "prettier": "^2.1.1",
-    "prettierrc": "^0.0.0-5"
+    "prettierrc": "^0.0.0-5",
+    "tailwindcss": "^1.7.6"
   },
   "husky": {
     "hooks": {
@@ -48,7 +57,7 @@
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "yarn lint:fix"
+      "yarn lint"
     ]
   }
 }
